@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gaffer — Redesign Mockup v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════════════ */
+:root {
+  /* Warm neutral base, deep indigo accent */
+  --bg:            #ECEAE5;   /* warm off-white — page bg */
+  --surface:       #F4F2EE;   /* lifted surface */
+  --card:          #FFFFFF;   /* cards */
+  --card-inset:    #F4F2EE;   /* inset areas */
+
+  --sidebar:       #181C1A;   /* very dark warm charcoal */
+  --sidebar-hover: #222824;
+  --sidebar-act:   #2C3530;
+
+  --border:        #DDD9D2;
+  --border-strong: #C4BFB6;
+
+  --text:          #1A1917;
+  --text-2:        #5C5851;
+  --text-3:        #A09B94;
+  --text-inv:      #E4EDEB;
+  --text-inv-dim:  #5E756F;
+
+  /* Deep teal — primary accent */
+  --accent:        #0F766E;
+  --accent-mid:    #14B8A6;
+  --accent-bg:     #F0FDFA;
+  --accent-border: #99F6E4;
+
+  /* Semantic colours */
+  --red:           #DC2626;
+  --red-bg:        #FEF2F2;
+  --red-border:    #FECACA;
+
+  --green:         #16A34A;
+  --green-bg:      #F0FDF4;
+  --green-border:  #BBF7D0;
+
+  --amber:         #D97706;
+  --amber-bg:      #FFFBEB;
+  --amber-border:  #FDE68A;
+
+  /* Calendar event bars */
+  --blue:          #0EA5E9;
+  --blue-bg:       #F0F9FF;
+  --blue-border:   #BAE6FD;
+
+  --font-d: 'Bebas Neue', sans-serif;
+  --font-b: 'IBM Plex Sans', sans-serif;
+  --font-m: 'DM Mono', monospace;
+
+  --r:   6px;
+  --r2:  10px;
+  --r3:  14px;
+  --sh:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --sh2: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05);
+  --t:   0.15s ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: var(--font-b); font-size: 14px;
+  background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+svg { display: block; flex-shrink: 0; }
+button { font-family: var(--font-b); cursor: pointer; border: none; background: none; color: inherit; }
+input { font-family: var(--font-b); }
+
+/* ═══════════════════════════════════════════════════
+   SHELL
+═══════════════════════════════════════════════════ */
+.shell { display: flex; height: 100vh; overflow: hidden; }
+
+/* ═══════════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════════ */
+.sidebar {
+  width: 200px;
+  background: var(--sidebar);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+/* Wordmark */
+.sb-brand {
+  padding: 18px 16px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sb-badge {
+  width: 30px; height: 30px;
+  background: var(--accent);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-d);
+  font-size: 19px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.sb-name { font-family: var(--font-d); font-size: 18px; letter-spacing: 0.06em; color: #EDE8E0; }
+.sb-sub  { font-family: var(--font-m); font-size: 9px; color: #787068; margin-top: 1px; letter-spacing: 0.04em; }
+
+/* Nav */
+.sb-nav { flex: 1; padding: 10px 8px; display: flex; flex-direction: column; gap: 1px; overflow-y: auto; }
+
+.sb-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 7px 10px;
+  border-radius: var(--r);
+  color: #A8A39C;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer;
+  transition: var(--t);
+  position: relative;
+}
+
+.sb-item:hover { background: var(--sidebar-hover); color: #D4CFC8; }
+
+.sb-item.act {
+  background: var(--sidebar-act);
+  color: var(--text-inv);
+}
+
+.sb-item.act::before {
+  content: ''; position: absolute; left: 0; top: 7px; bottom: 7px;
+  width: 3px; background: var(--accent);
+  border-radius: 0 2px 2px 0;
+}
+
+.sb-chip {
+  margin-left: auto;
+  font-family: var(--font-m);
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 8px;
+}
+
+.sb-chip--red { background: rgba(184,48,40,0.18); color: #E07070; }
+.sb-chip--dim { background: rgba(255,255,255,0.06); color: #5A5448; }
+
+.sb-sub-nav { margin: 2px 0 2px 27px; display: flex; flex-direction: column; gap: 0; }
+
+.sb-sub-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 5px 8px;
+  border-radius: var(--r);
+  color: #807A72;
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: var(--t);
+}
+
+.sb-sub-item:hover { color: #B0A89E; background: rgba(255,255,255,0.04); }
+.sb-sub-count { font-family: var(--font-m); font-size: 10px; color: #686460; }
+
+.sb-section { padding: 12px 10px 4px; font-family: var(--font-m); font-size: 9px; color: #5A5650; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.sb-foot {
+  padding: 10px 16px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  font-family: var(--font-m); font-size: 9px; color: #5A5650;
+}
+
+/* ═══════════════════════════════════════════════════
+   MAIN CONTENT
+═══════════════════════════════════════════════════ */
+.main { flex: 1; overflow-y: auto; min-width: 0; background: var(--bg); }
+
+.page { padding: 24px 24px 48px; }
+
+/* ═══════════════════════════════════════════════════
+   TOP BAR  — clock · greeting · weather
+═══════════════════════════════════════════════════ */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 20px;
+}
+
+.topbar-greeting { flex: 1; }
+
+.topbar-date {
+  font-family: var(--font-m);
+  font-size: 11px;
+  color: var(--text-3);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.topbar-title {
+  font-family: var(--font-d);
+  font-size: 34px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  line-height: 1;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.weather-pill {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 12px 6px 10px;
+  box-shadow: var(--sh);
+}
+
+.weather-temp { font-family: var(--font-m); font-size: 14px; font-weight: 500; color: var(--text); }
+.weather-desc { font-size: 12px; color: var(--text-2); }
+.wx-amber { color: #D49A20; }
+.wx-blue  { color: #5888C0; }
+.wx-grey  { color: #909098; }
+
+.clock {
+  font-family: var(--font-m);
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--text-2);
+  letter-spacing: -0.03em;
+}
+
+/* ═══════════════════════════════════════════════════
+   SITUATION STRIP  — 4 KPI tiles
+   This is the "at a glance" row. Tells the manager
+   the state of play before they read anything else.
+═══════════════════════════════════════════════════ */
+.strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.kpi {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 14px 16px;
+  box-shadow: var(--sh);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  transition: var(--t);
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi:hover { box-shadow: var(--sh2); transform: translateY(-1px); }
+
+.kpi--red    { border-top: 3px solid var(--red);    }
+.kpi--amber  { border-top: 3px solid var(--amber);  }
+.kpi--accent { border-top: 3px solid var(--accent); }
+.kpi--blue   { border-top: 3px solid var(--blue);   }
+
+.kpi-label {
+  font-family: var(--font-m);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.kpi--red    .kpi-label { color: var(--red);    }
+.kpi--amber  .kpi-label { color: var(--amber);  }
+.kpi--accent .kpi-label { color: var(--accent); }
+.kpi--blue   .kpi-label { color: var(--blue);   }
+
+.kpi-num {
+  font-family: var(--font-d);
+  font-size: 36px;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: var(--text);
+}
+
+.kpi-sub {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 2px;
+}
+
+/* ═══════════════════════════════════════════════════
+   MAIN GRID
+   Left (wider): Tackle List + Checklists
+   Right (narrower): Calendar → Urgent → Notices
+═══════════════════════════════════════════════════ */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 16px;
+  align-items: start;
+}
+
+.col { display: flex; flex-direction: column; gap: 16px; }
+
+/* ═══════════════════════════════════════════════════
+   CARD (base panel)
+═══════════════════════════════════════════════════ */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  box-shadow: var(--sh);
+  overflow: hidden;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 16px 11px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-icon     { color: var(--text-3); }
+.card-icon--a  { color: var(--accent); }
+.card-icon--r  { color: var(--red);   }
+.card-icon--g  { color: var(--green); }
+.card-icon--b  { color: var(--blue);  }
+
+.card-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  flex: 1;
+}
+
+.badge {
+  font-family: var(--font-m);
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+.badge--red   { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-border);   }
+.badge--amber { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.badge--green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.badge--dim   { background: var(--card-inset); color: var(--text-2); border: 1px solid var(--border); }
+
+/* ═══════════════════════════════════════════════════
+   TACKLE LIST
+   Primary daily tool — lives at the top of the left
+   column and gets the most space.
+═══════════════════════════════════════════════════ */
+.tl-add {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--card-inset);
+  border-bottom: 1px solid var(--border);
+}
+
+.tl-add-icon { color: var(--accent); }
+
+.tl-add-input {
+  flex: 1; background: transparent; border: none; outline: none;
+  font-size: 13px; color: var(--text);
+}
+
+.tl-add-input::placeholder { color: var(--text-3); }
+
+.tl-hint {
+  font-family: var(--font-m); font-size: 10px; color: var(--text-3);
+  background: var(--border); padding: 2px 6px; border-radius: 4px;
+}
+
+.tl-section {
+  padding: 6px 16px 2px;
+  font-family: var(--font-m); font-size: 10px;
+  color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Two-column task layout for the tackle list —
+   lets us pack more tasks without scrolling */
+.tl-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.tl-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--t);
+  position: relative;
+}
+
+.tl-row:hover { background: var(--surface); }
+.tl-row:hover .tl-actions { opacity: 1; }
+
+/* Odd rows get a right border to divide the columns */
+.tl-row:nth-child(odd) { border-right: 1px solid var(--border); }
+
+.tl-row--done .tl-text { color: var(--text-3); text-decoration: line-through; }
+
+.cb {
+  width: 18px; height: 18px;
+  border-radius: 4px; border: 1.5px solid var(--border-strong);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: var(--t); flex-shrink: 0;
+}
+
+.cb:hover { border-color: var(--accent); background: var(--accent-bg); }
+.cb--done { background: var(--green); border-color: var(--green); }
+
+.tl-text { flex: 1; font-size: 13px; line-height: 1.35; color: var(--text); }
+
+.tl-actions {
+  display: flex; gap: 2px;
+  opacity: 0; transition: opacity var(--t);
+}
+
+.icon-btn {
+  width: 22px; height: 22px; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-3); transition: var(--t);
+  border: 1px solid transparent;
+}
+
+.icon-btn:hover { background: var(--card-inset); border-color: var(--border); color: var(--text); }
+.icon-btn--del:hover { color: var(--red); border-color: var(--red-border); background: var(--red-bg); }
+
+.tl-done-section {
+  padding: 6px 16px 2px;
+  font-family: var(--font-m); font-size: 10px;
+  color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.tl-clear-btn {
+  font-family: var(--font-m); font-size: 10px;
+  color: var(--text-3); cursor: pointer;
+  padding: 0 4px;
+  transition: var(--t);
+}
+
+.tl-clear-btn:hover { color: var(--red); }
+
+/* ═══════════════════════════════════════════════════
+   CHECKLIST PROGRESS
+   Compact grid below tackle list — click to navigate.
+═══════════════════════════════════════════════════ */
+.prog-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+
+.prog-card {
+  padding: 14px 14px 12px;
+  cursor: pointer;
+  transition: background var(--t);
+  border-right: 1px solid var(--border);
+  background: transparent; text-align: left;
+}
+
+.prog-card:last-child { border-right: none; }
+.prog-card:hover { background: var(--surface); }
+.prog-card--done { background: var(--green-bg); }
+.prog-card--done:hover { background: #DCEEE6; }
+
+.prog-label {
+  font-family: var(--font-m); font-size: 9px;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--text-3); margin-bottom: 6px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.prog-label--done { color: var(--green); }
+
+.prog-flag {
+  font-family: var(--font-m); font-size: 9px;
+  color: var(--red); letter-spacing: 0;
+}
+
+.prog-flag--ok { color: var(--green); }
+
+.prog-nums {
+  display: flex; align-items: baseline; gap: 2px; margin-bottom: 8px;
+}
+
+.prog-n { font-family: var(--font-d); font-size: 28px; color: var(--text); line-height: 1; }
+.prog-sep { font-family: var(--font-m); font-size: 12px; color: var(--text-3); }
+.prog-tot { font-family: var(--font-m); font-size: 12px; color: var(--text-3); }
+.prog-n--done { color: var(--green); }
+
+.prog-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+.prog-fill--done { background: var(--green); }
+
+/* ═══════════════════════════════════════════════════
+   CALENDAR PANEL  (right column, top)
+═══════════════════════════════════════════════════ */
+.cal-nav-row {
+  display: flex; align-items: center; gap: 0;
+}
+
+.cal-arr {
+  width: 28px; height: 28px;
+  border-radius: var(--r); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-2); cursor: pointer; transition: var(--t);
+  background: transparent;
+}
+
+.cal-arr:hover { background: var(--surface); color: var(--text); }
+
+.cal-day {
+  flex: 1; text-align: center;
+  font-size: 13px; font-weight: 600; color: var(--text);
+}
+
+/* Timeline-style events */
+.event-block {
+  display: flex; gap: 12px; align-items: stretch;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--t);
+}
+
+.event-block:last-child { border-bottom: none; }
+.event-block:hover { background: var(--surface); }
+
+.event-time-col {
+  display: flex; flex-direction: column; align-items: flex-end;
+  min-width: 54px; padding-top: 1px;
+}
+
+.event-time {
+  font-family: var(--font-m); font-size: 11px; color: var(--text-2);
+  line-height: 1.3; white-space: nowrap;
+}
+
+.event-time-end { font-family: var(--font-m); font-size: 10px; color: var(--text-3); }
+
+.event-bar {
+  width: 3px; border-radius: 2px; background: var(--amber);
+  flex-shrink: 0; margin: 2px 0;
+}
+
+.event-bar--blue  { background: var(--blue); }
+.event-bar--green { background: var(--green); }
+
+.event-body { flex: 1; min-width: 0; }
+.event-title { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.35; }
+.event-loc   { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+
+/* ═══════════════════════════════════════════════════
+   URGENT PANEL
+   Overdue + Due this week merged into one panel —
+   overdue at top with red accent, upcoming below.
+   No need for two separate panels.
+═══════════════════════════════════════════════════ */
+.urgent-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--t);
+}
+
+.urgent-row:last-child { border-bottom: none; }
+.urgent-row:hover { background: var(--surface); }
+
+.urgent-cb {
+  width: 17px; height: 17px; border-radius: 4px;
+  border: 1.5px solid var(--border-strong);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: var(--t); flex-shrink: 0;
+}
+
+.urgent-cb--red:hover   { border-color: var(--red);   background: var(--red-bg);   }
+.urgent-cb--amber:hover { border-color: var(--amber); background: var(--amber-bg); }
+
+.urgent-text { flex: 1; font-size: 12.5px; color: var(--text); }
+
+.urgent-meta {
+  display: flex; align-items: center; gap: 5px;
+  flex-shrink: 0;
+}
+
+.urg-cadence {
+  font-family: var(--font-m); font-size: 9.5px; color: var(--text-3);
+  background: var(--card-inset); border: 1px solid var(--border);
+  padding: 1px 5px; border-radius: 3px;
+}
+
+.urg-date { font-family: var(--font-m); font-size: 10px; color: var(--red); font-weight: 500; }
+.urg-when { font-family: var(--font-m); font-size: 10px; color: var(--amber); }
+
+.urgent-section {
+  padding: 5px 16px 3px;
+  font-family: var(--font-m); font-size: 9px;
+  color: var(--text-3); letter-spacing: 0.07em; text-transform: uppercase;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+}
+
+.urgent-section--red   { border-left: 3px solid var(--red);   color: var(--red);   background: var(--red-bg);   }
+.urgent-section--amber { border-left: 3px solid var(--amber); color: var(--amber); background: var(--amber-bg); }
+
+/* ═══════════════════════════════════════════════════
+   NOTICES
+═══════════════════════════════════════════════════ */
+.notice-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--t);
+}
+
+.notice-row:last-child { border-bottom: none; }
+.notice-row:hover { background: var(--surface); }
+
+.notice-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0;
+}
+
+.notice-text { flex: 1; font-size: 13px; color: var(--text); line-height: 1.4; }
+
+.notice-add {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--card-inset);
+}
+
+.notice-add-input {
+  flex: 1; background: transparent; border: none; outline: none;
+  font-size: 13px; color: var(--text);
+}
+
+.notice-add-input::placeholder { color: var(--text-3); }
+
+/* ═══════════════════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+/* ═══════════════════════════════════════════════════
+   ANNOTATION BAR
+═══════════════════════════════════════════════════ */
+.anno {
+  background: #0D1412;
+  padding: 8px 24px;
+  font-family: var(--font-m); font-size: 11px;
+  color: #3A5450;
+  display: flex; align-items: center; gap: 20px;
+  border-bottom: 2px solid var(--accent);
+  flex-shrink: 0;
+}
+
+.anno strong { color: #5EBFB5; }
+
+.anno-pill {
+  background: rgba(15,118,110,0.18);
+  color: #5EBFB5;
+  border: 1px solid rgba(15,118,110,0.35);
+  padding: 2px 8px; border-radius: 10px; font-size: 10px;
+}
+
+.anno-note {
+  margin-left: auto; font-size: 10px; color: #3A3630;
+}
+
+/* ═══════════════════════════════════════════════════
+   PAGE WRAPPER (includes anno bar)
+═══════════════════════════════════════════════════ */
+.root { display: flex; flex-direction: column; height: 100vh; }
+</style>
+</head>
+<body>
+
+<div class="root">
+
+<!-- Annotation bar -->
+<div class="anno">
+  <strong>GAFFER — Layout &amp; Workflow Redesign</strong>
+  <span class="anno-pill">Mockup v2</span>
+  <span>New: Situation strip · Two-column task grid · Unified urgent panel · Timeline calendar</span>
+  <span class="anno-note">Static preview</span>
+</div>
+
+<div class="shell">
+
+  <!-- ──────────────────────────────────────────────
+       SIDEBAR
+  ────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-badge">G</div>
+      <div>
+        <div class="sb-name">GAFFER</div>
+        <div class="sb-sub">Fox &amp; Hounds · Barley</div>
+      </div>
+    </div>
+
+    <nav class="sb-nav">
+
+      <div class="sb-item act">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+        Dashboard
+      </div>
+
+      <div class="sb-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+          <line x1="8" y1="18" x2="21" y2="18"/>
+          <circle cx="3" cy="6" r="1" fill="currentColor"/>
+          <circle cx="3" cy="12" r="1" fill="currentColor"/>
+          <circle cx="3" cy="18" r="1" fill="currentColor"/>
+        </svg>
+        Tackle List
+        <span class="sb-chip sb-chip--dim">5</span>
+      </div>
+
+      <div class="sb-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <polyline points="9,11 12,14 22,4"/>
+          <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+        </svg>
+        Checklists
+        <span class="sb-chip sb-chip--red">3</span>
+      </div>
+
+      <div class="sb-sub-nav">
+        <div class="sb-sub-item">Weekly      <span class="sb-sub-count">3 / 8</span></div>
+        <div class="sb-sub-item">Monthly     <span class="sb-sub-count">1 / 12</span></div>
+        <div class="sb-sub-item">6-Monthly   <span class="sb-sub-count">6 / 6 ✓</span></div>
+        <div class="sb-sub-item">Yearly      <span class="sb-sub-count">2 / 4</span></div>
+      </div>
+
+    </nav>
+
+    <div class="sb-foot">
+      Last sync: just now
+    </div>
+  </aside>
+
+  <!-- ──────────────────────────────────────────────
+       MAIN
+  ────────────────────────────────────────────── -->
+  <main class="main">
+    <div class="page">
+
+      <!-- TOP BAR -->
+      <div class="topbar">
+        <div class="topbar-greeting">
+          <div class="topbar-date">Thursday, 5 June 2026</div>
+          <div class="topbar-title">Good afternoon</div>
+        </div>
+        <div class="topbar-right">
+          <div class="weather-pill">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="wx-amber">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <span class="weather-temp">18°C</span>
+            <span class="weather-desc">Clear</span>
+          </div>
+          <div class="clock">14:32</div>
+        </div>
+      </div>
+
+      <!-- ── SITUATION STRIP ── -->
+      <!--
+        Four tiles that answer "what's the state of play right now?"
+        before the manager reads anything else. Click any tile to
+        jump straight to that section.
+      -->
+      <div class="strip">
+
+        <div class="kpi kpi--red">
+          <div class="kpi-label">Overdue</div>
+          <div class="kpi-num">3</div>
+          <div class="kpi-sub">tasks need attention</div>
+        </div>
+
+        <div class="kpi kpi--amber">
+          <div class="kpi-label">Due This Week</div>
+          <div class="kpi-num">4</div>
+          <div class="kpi-sub">tasks coming up</div>
+        </div>
+
+        <div class="kpi kpi--blue">
+          <div class="kpi-label">Events Today</div>
+          <div class="kpi-num">3</div>
+          <div class="kpi-sub">on the calendar</div>
+        </div>
+
+        <div class="kpi kpi--accent">
+          <div class="kpi-label">Tackle List</div>
+          <div class="kpi-num">5</div>
+          <div class="kpi-sub">tasks remaining</div>
+        </div>
+
+      </div>
+
+      <!-- ── MAIN GRID ── -->
+      <div class="grid">
+
+        <!-- ── LEFT COLUMN: primary work area ── -->
+        <div class="col">
+
+          <!--
+            TACKLE LIST
+            Sits top-left because it's the most-used daily tool.
+            Two-column grid layout so more tasks are visible
+            without scrolling — better use of the wider column.
+          -->
+          <div class="card">
+            <div class="card-head">
+              <svg class="card-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+                <circle cx="3" cy="6" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/><circle cx="3" cy="18" r="1" fill="currentColor"/>
+              </svg>
+              <span class="card-title">Tackle List</span>
+              <span class="badge badge--dim">5 remaining</span>
+            </div>
+
+            <!-- Quick-add bar -->
+            <div class="tl-add">
+              <svg class="tl-add-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <input class="tl-add-input" placeholder="Add a task…" disabled>
+              <span class="tl-hint">↵ to add</span>
+            </div>
+
+            <!-- Pending tasks: 2-column grid -->
+            <div class="tl-grid">
+
+              <div class="tl-row">
+                <div class="cb"></div>
+                <span class="tl-text">Order more Aspall cider</span>
+                <div class="tl-actions">
+                  <button class="icon-btn">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+                  </button>
+                  <button class="icon-btn icon-btn--del">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="tl-row">
+                <div class="cb"></div>
+                <span class="tl-text">Chase electrician — car park light</span>
+                <div class="tl-actions">
+                  <button class="icon-btn">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+                  </button>
+                  <button class="icon-btn icon-btn--del">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="tl-row">
+                <div class="cb"></div>
+                <span class="tl-text">Call St Austell — summer range</span>
+                <div class="tl-actions">
+                  <button class="icon-btn">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+                  </button>
+                  <button class="icon-btn icon-btn--del">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="tl-row">
+                <div class="cb"></div>
+                <span class="tl-text">Book PAT testing</span>
+                <div class="tl-actions">
+                  <button class="icon-btn">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+                  </button>
+                  <button class="icon-btn icon-btn--del">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="tl-row">
+                <div class="cb"></div>
+                <span class="tl-text">Update staff rota — bank holiday</span>
+                <div class="tl-actions">
+                  <button class="icon-btn">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+                  </button>
+                  <button class="icon-btn icon-btn--del">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- empty cell to keep grid even -->
+              <div class="tl-row" style="visibility:hidden;"></div>
+
+            </div>
+
+            <!-- Completed section -->
+            <div class="tl-done-section">
+              Completed (2)
+              <span class="tl-clear-btn">Clear all</span>
+            </div>
+
+            <div class="tl-grid">
+              <div class="tl-row tl-row--done">
+                <div class="cb cb--done">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg>
+                </div>
+                <span class="tl-text">Restock cleaning supplies</span>
+                <div class="tl-actions">
+                  <button class="icon-btn icon-btn--del">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="tl-row tl-row--done">
+                <div class="cb cb--done">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg>
+                </div>
+                <span class="tl-text">Submit insurance renewal</span>
+                <div class="tl-actions">
+                  <button class="icon-btn icon-btn--del">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /tackle list card -->
+
+          <!--
+            CHECKLIST PROGRESS
+            4-column compact bar at the bottom of the left column.
+            Click any cell → jump to that checklist.
+          -->
+          <div class="card">
+            <div class="card-head">
+              <svg class="card-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,11 12,14 22,4"/>
+                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+              </svg>
+              <span class="card-title">Checklists</span>
+              <span class="badge badge--red">3 overdue</span>
+            </div>
+
+            <div class="prog-grid">
+
+              <button class="prog-card">
+                <div class="prog-label">
+                  Weekly
+                </div>
+                <div class="prog-nums">
+                  <span class="prog-n">3</span>
+                  <span class="prog-sep">/</span>
+                  <span class="prog-tot">8</span>
+                </div>
+                <div class="prog-bar"><div class="prog-fill" style="width:37%"></div></div>
+              </button>
+
+              <button class="prog-card">
+                <div class="prog-label">
+                  Monthly
+                  <span class="prog-flag">2 overdue</span>
+                </div>
+                <div class="prog-nums">
+                  <span class="prog-n">1</span>
+                  <span class="prog-sep">/</span>
+                  <span class="prog-tot">12</span>
+                </div>
+                <div class="prog-bar"><div class="prog-fill" style="width:8%"></div></div>
+              </button>
+
+              <button class="prog-card prog-card--done">
+                <div class="prog-label prog-label--done">
+                  6-Monthly
+                  <span class="prog-flag--ok">✓ Done</span>
+                </div>
+                <div class="prog-nums">
+                  <span class="prog-n prog-n--done">6</span>
+                  <span class="prog-sep">/</span>
+                  <span class="prog-tot">6</span>
+                </div>
+                <div class="prog-bar"><div class="prog-fill prog-fill--done" style="width:100%"></div></div>
+              </button>
+
+              <button class="prog-card">
+                <div class="prog-label">
+                  Yearly
+                  <span class="prog-flag">1 overdue</span>
+                </div>
+                <div class="prog-nums">
+                  <span class="prog-n">2</span>
+                  <span class="prog-sep">/</span>
+                  <span class="prog-tot">4</span>
+                </div>
+                <div class="prog-bar"><div class="prog-fill" style="width:50%"></div></div>
+              </button>
+
+            </div>
+          </div>
+
+        </div><!-- /left col -->
+
+        <!-- ── RIGHT COLUMN: context + alerts ── -->
+        <div class="col">
+
+          <!--
+            CALENDAR
+            Timeline-style events with a coloured bar showing
+            duration at a glance. Day navigation inline.
+          -->
+          <div class="card">
+            <div class="card-head">
+              <svg class="card-icon card-icon--b" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                <line x1="3" y1="9" x2="21" y2="9"/>
+                <line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/>
+              </svg>
+              <span class="card-title">Calendar</span>
+              <div class="cal-nav-row" style="gap:6px">
+                <button class="cal-arr">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,18 9,12 15,6"/></svg>
+                </button>
+                <span class="cal-day" style="font-size:12px; min-width:70px">Today</span>
+                <button class="cal-arr">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="event-block">
+              <div class="event-time-col">
+                <span class="event-time">10:00</span>
+                <span class="event-time-end">11:00</span>
+              </div>
+              <div class="event-bar"></div>
+              <div class="event-body">
+                <div class="event-title">Staff briefing</div>
+                <div class="event-loc">Fox &amp; Hounds</div>
+              </div>
+            </div>
+
+            <div class="event-block">
+              <div class="event-time-col">
+                <span class="event-time">14:00</span>
+                <span class="event-time-end">15:30</span>
+              </div>
+              <div class="event-bar event-bar--green"></div>
+              <div class="event-body">
+                <div class="event-title">Cellar delivery — Adnams</div>
+                <div class="event-loc">Delivery entrance</div>
+              </div>
+            </div>
+
+            <div class="event-block">
+              <div class="event-time-col">
+                <span class="event-time">19:00</span>
+                <span class="event-time-end">21:00</span>
+              </div>
+              <div class="event-bar event-bar--blue"></div>
+              <div class="event-body">
+                <div class="event-title">Quiz night</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!--
+            URGENT PANEL
+            Overdue + Due this week merged into one panel.
+            Previously two separate panels — merging them halves
+            the visual noise and keeps urgency in one place.
+            Red section first (overdue), amber below (upcoming).
+          -->
+          <div class="card">
+            <div class="card-head">
+              <svg class="card-icon card-icon--r" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+              <span class="card-title">Urgent</span>
+              <span class="badge badge--red">3 overdue</span>
+              <span class="badge badge--amber" style="margin-left:4px">4 this week</span>
+            </div>
+
+            <div class="urgent-section urgent-section--red">Overdue</div>
+
+            <div class="urgent-row">
+              <div class="urgent-cb urgent-cb--red"></div>
+              <span class="urgent-text">Clean cellar lines</span>
+              <div class="urgent-meta">
+                <span class="urg-cadence">Monthly</span>
+                <span class="urg-date">28 May</span>
+              </div>
+            </div>
+
+            <div class="urgent-row">
+              <div class="urgent-cb urgent-cb--red"></div>
+              <span class="urgent-text">Test fire alarm panel</span>
+              <div class="urgent-meta">
+                <span class="urg-cadence">Monthly</span>
+                <span class="urg-date">1 Jun</span>
+              </div>
+            </div>
+
+            <div class="urgent-row">
+              <div class="urgent-cb urgent-cb--red"></div>
+              <span class="urgent-text">Calibrate till float</span>
+              <div class="urgent-meta">
+                <span class="urg-cadence">Weekly</span>
+                <span class="urg-date">3 Jun</span>
+              </div>
+            </div>
+
+            <div class="urgent-section urgent-section--amber">Due this week</div>
+
+            <div class="urgent-row">
+              <div class="urgent-cb urgent-cb--amber"></div>
+              <span class="urgent-text">Stock take — spirits</span>
+              <div class="urgent-meta">
+                <span class="urg-cadence">Weekly</span>
+                <span class="urg-when">today</span>
+              </div>
+            </div>
+
+            <div class="urgent-row">
+              <div class="urgent-cb urgent-cb--amber"></div>
+              <span class="urgent-text">Check CO2 levels</span>
+              <div class="urgent-meta">
+                <span class="urg-cadence">Weekly</span>
+                <span class="urg-when">tomorrow</span>
+              </div>
+            </div>
+
+            <div class="urgent-row">
+              <div class="urgent-cb urgent-cb--amber"></div>
+              <span class="urgent-text">Deep clean kitchen extract</span>
+              <div class="urgent-meta">
+                <span class="urg-cadence">Monthly</span>
+                <span class="urg-when">in 3 days</span>
+              </div>
+            </div>
+
+            <div class="urgent-row">
+              <div class="urgent-cb urgent-cb--amber"></div>
+              <span class="urgent-text">Pest control inspection</span>
+              <div class="urgent-meta">
+                <span class="urg-cadence">6-Monthly</span>
+                <span class="urg-when">in 5 days</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!--
+            PINNED NOTICES
+            Compact at the bottom of the right column — persistent
+            reminders that don't need primary real estate.
+          -->
+          <div class="card">
+            <div class="card-head">
+              <svg class="card-icon card-icon--a" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              <span class="card-title">Pinned Notices</span>
+              <span class="badge badge--amber">2</span>
+            </div>
+
+            <div class="notice-row">
+              <span class="notice-dot"></span>
+              <span class="notice-text">No children after 9pm on Fri &amp; Sat</span>
+              <button class="icon-btn icon-btn--del" style="flex-shrink:0">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+
+            <div class="notice-row">
+              <span class="notice-dot"></span>
+              <span class="notice-text">Cellar temp running 1° high — monitor</span>
+              <button class="icon-btn icon-btn--del" style="flex-shrink:0">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+
+            <div class="notice-add">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--text-3); flex-shrink:0">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <input class="notice-add-input" placeholder="Add a notice…" disabled>
+            </div>
+
+          </div>
+
+        </div><!-- /right col -->
+      </div><!-- /grid -->
+    </div><!-- /page -->
+  </main>
+
+</div><!-- /shell -->
+</div><!-- /root -->
+
+</body>
+</html>

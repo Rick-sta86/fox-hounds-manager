@@ -1,0 +1,545 @@
+/* ── Meetings.css ────────────────────────────────────────────────────────── */
+
+/* ── Page layout ─────────────────────────────────────────────────────────── */
+
+.mt-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 0 0 48px;
+}
+
+.mt-page-header {
+  border-bottom: 1px solid var(--border);
+  padding: 28px 32px 24px;
+  background: var(--bg-surface);
+}
+
+.mt-page-header-inner {
+  max-width: 860px;
+}
+
+.mt-page-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+  line-height: 1;
+}
+
+.mt-page-sub {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ── Cards container ─────────────────────────────────────────────────────── */
+
+.mt-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 32px;
+  max-width: 860px;
+}
+
+/* ── Meeting card ────────────────────────────────────────────────────────── */
+
+.mt-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+/* ── Card header ─────────────────────────────────────────────────────────── */
+
+.mt-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 16px 13px 14px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.mt-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.mt-card-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.mt-cadence-badge {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  background: var(--accent-glow);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius);
+  padding: 2px 7px;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.mt-cadence-badge--monthly {
+  color: var(--blue);
+  background: var(--blue-bg);
+  border-color: var(--blue-border);
+}
+
+.mt-card-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1;
+}
+
+.mt-note-count {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--accent);
+  background: var(--accent-glow);
+  border: 1px solid var(--accent-border);
+  border-radius: 8px;
+  padding: 1px 8px;
+}
+
+.mt-clear-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 4px 9px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.mt-clear-btn:hover {
+  color: var(--red);
+  border-color: var(--red-border);
+  background: var(--red-bg);
+}
+
+/* ── Add row ─────────────────────────────────────────────────────────────── */
+
+.mt-add-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
+}
+
+.mt-add-icon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.mt-add-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 4px 0;
+  caret-color: var(--accent);
+}
+
+.mt-add-input::placeholder {
+  color: var(--text-muted);
+}
+
+.mt-add-submit {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-glow);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius);
+  padding: 4px 12px;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: all var(--transition);
+}
+
+.mt-add-submit:hover {
+  background: #CCFBF1;
+  border-color: var(--accent-dim);
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+
+.mt-empty {
+  padding: 20px 16px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ── Notes list ──────────────────────────────────────────────────────────── */
+
+.mt-notes-list {
+  padding: 4px 0;
+}
+
+/* ── Note row ────────────────────────────────────────────────────────────── */
+
+.mt-note-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 12px 9px 14px;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+  min-height: 42px;
+}
+
+.mt-note-row:last-child {
+  border-bottom: none;
+}
+
+.mt-note-row:hover {
+  background: var(--bg-surface);
+}
+
+.mt-note-row--discussed {
+  opacity: 0.45;
+}
+
+/* ── Checkbox ────────────────────────────────────────────────────────────── */
+
+.mt-checkbox {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border-mid);
+  border-radius: 3px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  transition: all var(--transition);
+  padding: 0;
+  margin-top: 2px;
+}
+
+.mt-checkbox:hover {
+  border-color: var(--accent);
+}
+
+.mt-checkbox--checked {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ── Note body ───────────────────────────────────────────────────────────── */
+
+.mt-note-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mt-note-text {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+  user-select: none;
+}
+
+.mt-note-time {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.mt-note-text--discussed {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* ── Note actions (edit + delete) ────────────────────────────────────────── */
+
+.mt-note-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── Edit button ─────────────────────────────────────────────────────────── */
+
+.mt-edit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--transition), color var(--transition), background var(--transition);
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.mt-note-row:hover .mt-edit-btn {
+  opacity: 1;
+}
+
+.mt-edit-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+}
+
+/* ── Inline edit input ───────────────────────────────────────────────────── */
+
+.mt-edit-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--accent);
+  outline: none;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 2px 0;
+  caret-color: var(--accent);
+  width: 100%;
+}
+
+/* ── Delete button ───────────────────────────────────────────────────────── */
+
+.mt-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--transition), color var(--transition), background var(--transition);
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.mt-note-row:hover .mt-delete-btn {
+  opacity: 1;
+}
+
+.mt-delete-btn:hover {
+  color: var(--red);
+  background: var(--red-bg);
+}
+
+/* ── Sub-notes ───────────────────────────────────────────────────────────── */
+
+.mt-subnotes {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 5px;
+}
+
+.mt-subnote-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 2px;
+}
+
+.mt-subnote-bullet {
+  color: var(--text-muted);
+  font-size: 1rem;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: -1px;
+}
+
+.mt-subnote-text {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  flex: 1;
+  line-height: 1.4;
+}
+
+.mt-subnote-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--transition), color var(--transition), background var(--transition);
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.mt-note-row:hover .mt-subnote-delete {
+  opacity: 1;
+}
+
+.mt-subnote-delete:hover {
+  color: var(--red);
+  background: var(--red-bg);
+}
+
+/* ── Add sub-note ────────────────────────────────────────────────────────── */
+
+.mt-add-subnote-btn {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  cursor: pointer;
+  padding: 2px 0;
+  margin-top: 4px;
+  opacity: 0;
+  transition: opacity var(--transition), color var(--transition);
+}
+
+.mt-note-row:hover .mt-add-subnote-btn {
+  opacity: 1;
+}
+
+.mt-add-subnote-btn:hover {
+  color: var(--accent);
+}
+
+.mt-add-subnote-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+  padding-left: 2px;
+}
+
+.mt-subnote-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-mid);
+  outline: none;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  padding: 2px 0;
+  caret-color: var(--accent);
+}
+
+.mt-subnote-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ── Discussed toggle ────────────────────────────────────────────────────── */
+
+.mt-discussed-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 14px;
+  background: var(--bg-surface);
+  border: none;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-align: left;
+  transition: color var(--transition), background var(--transition);
+}
+
+.mt-discussed-toggle:hover {
+  color: var(--text-dim);
+  background: var(--bg-elevated);
+}
+
+.mt-discussed-toggle-caret {
+  font-size: 0.6rem;
+  margin-left: auto;
+  opacity: 0.6;
+}
+
+/* ── Mobile ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .mt-page {
+    padding-bottom: 80px;
+  }
+
+  .mt-page-header {
+    padding: 20px 16px 16px;
+  }
+
+  .mt-page-title {
+    font-size: 1.7rem;
+  }
+
+  .mt-cards {
+    padding: 16px 12px;
+    gap: 12px;
+  }
+
+  .mt-delete-btn,
+  .mt-edit-btn,
+  .mt-subnote-delete,
+  .mt-add-subnote-btn {
+    opacity: 1;
+  }
+
+  .mt-card-title {
+    font-size: 1.1rem;
+  }
+}

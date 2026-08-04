@@ -1,0 +1,738 @@
+/* ── Checklists.css ────────────────────────────────────────────────────────── */
+/* Follows Fox & Hounds design tokens exactly. No Tailwind.                    */
+
+/* ── Page layout ─────────────────────────────────────────────────────────── */
+
+.cl-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 0 0 48px;
+}
+
+.cl-page-header {
+  border-bottom: 1px solid var(--border);
+  padding: 28px 32px 24px;
+  background: var(--bg-surface);
+}
+
+.cl-page-header-inner {
+  max-width: 960px;
+}
+
+.cl-page-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+  line-height: 1;
+}
+
+.cl-page-sub {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin: 0;
+}
+
+/* ── Groups container ─────────────────────────────────────────────────────── */
+
+.cl-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0 32px;
+  margin-top: 24px;
+  max-width: 960px;
+}
+
+/* ── Cadence group ────────────────────────────────────────────────────────── */
+
+.cl-group {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: border-color var(--transition);
+}
+
+.cl-group--complete {
+  border-color: var(--green);
+}
+
+.cl-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 14px 14px;
+  background: var(--bg-elevated);
+  gap: 12px;
+}
+
+.cl-group-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cl-group-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.cl-cadence-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-glow);
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius);
+  padding: 2px 7px;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+
+.cl-group-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1;
+}
+
+.cl-group-counter {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-left: 2px;
+}
+
+.cl-counter-done {
+  color: var(--green);
+}
+
+.cl-counter-sep {
+  margin: 0 2px;
+  color: var(--border-mid);
+}
+
+.cl-counter-total {
+  color: var(--text-muted);
+}
+
+.cl-complete-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: var(--green);
+  background: var(--green-dim);
+  border: 1px solid var(--green);
+  border-radius: var(--radius);
+  padding: 2px 8px;
+}
+
+/* ── Reset button ─────────────────────────────────────────────────────────── */
+
+.cl-reset-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all var(--transition);
+  letter-spacing: 0.02em;
+}
+
+.cl-reset-btn:hover:not(.cl-reset-btn--disabled) {
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background: var(--accent-glow);
+}
+
+.cl-reset-btn--disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.cl-reset-btn--active svg {
+  animation: spin 0.5s ease;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
+.cl-collapse-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.cl-collapse-btn:hover {
+  border-color: var(--border-mid);
+  color: var(--text-primary);
+}
+
+/* ── Progress bar ─────────────────────────────────────────────────────────── */
+
+.cl-progress-track {
+  height: 2px;
+  background: var(--border);
+  width: 100%;
+}
+
+.cl-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.cl-progress-fill--done {
+  background: var(--green);
+}
+
+/* ── Task list ────────────────────────────────────────────────────────────── */
+
+.cl-task-list {
+  padding: 8px 0 4px;
+}
+
+.cl-empty-hint {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  padding: 12px 16px;
+  margin: 0;
+}
+
+/* ── Task row ─────────────────────────────────────────────────────────────── */
+
+.cl-task-row {
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+
+.cl-task-row:last-child {
+  border-bottom: none;
+}
+
+.cl-task-row:hover {
+  background: var(--bg-elevated);
+}
+
+.cl-task-row--has-notes {
+  cursor: pointer;
+}
+
+.cl-task-row.cl-task--done {
+  opacity: 0.45;
+}
+
+.cl-task-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px 10px 14px;
+  min-height: 42px;
+}
+
+/* ── Checkbox ─────────────────────────────────────────────────────────────── */
+
+.cl-checkbox {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border-mid);
+  border-radius: 3px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  transition: all var(--transition);
+}
+
+.cl-checkbox:hover {
+  border-color: var(--accent);
+}
+
+.cl-checkbox--checked {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+
+/* ── Task text ────────────────────────────────────────────────────────────── */
+
+.cl-task-text {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  flex: 1;
+  min-width: 0;
+  cursor: default;
+  user-select: none;
+}
+
+.cl-task--done .cl-task-text {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.cl-task-edit-input {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg);
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 4px 8px;
+  outline: none;
+}
+
+.cl-task-edit-input:focus {
+  border-color: var(--accent);
+}
+
+/* ── Task actions ─────────────────────────────────────────────────────────── */
+
+.cl-task-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity var(--transition);
+  flex-shrink: 0;
+}
+
+.cl-task-row:hover .cl-task-actions {
+  opacity: 1;
+}
+
+.cl-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.cl-action:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.cl-action--delete:hover {
+  color: var(--red);
+  background: var(--red-bg);
+}
+
+.cl-action--save:hover {
+  color: var(--green);
+}
+
+.cl-action--notes.cl-action--has-notes {
+  color: var(--accent);
+}
+
+/* ── Due date ─────────────────────────────────────────────────────────────── */
+
+.cl-due-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.cl-due-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cl-due-label--overdue {
+  color: var(--red);
+}
+
+.cl-due-overdue-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--red);
+  flex-shrink: 0;
+}
+
+.cl-action--date {
+  opacity: 0;
+  transition: opacity var(--transition), color var(--transition);
+}
+
+.cl-task-row:hover .cl-action--date {
+  opacity: 1;
+}
+
+.cl-action--date-set {
+  color: var(--accent-dim);
+}
+
+.cl-action--date-set:hover {
+  color: var(--accent);
+}
+
+/* Hidden native date input — triggered programmatically */
+.cl-date-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  border: none;
+  padding: 0;
+}
+
+/* ── Notes panel ──────────────────────────────────────────────────────────── */
+
+.cl-notes-panel {
+  padding: 0 14px 12px 42px;
+  animation: notesReveal 0.15s ease;
+}
+
+@keyframes notesReveal {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.cl-notes-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  padding: 8px 10px;
+  resize: vertical;
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.cl-notes-textarea:focus {
+  border-color: var(--accent-dim);
+}
+
+.cl-notes-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* ── Add task row ─────────────────────────────────────────────────────────── */
+
+.cl-add-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 8px 14px;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+
+.cl-add-icon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.cl-add-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  padding: 4px 0;
+  caret-color: var(--accent);
+}
+
+.cl-add-input::placeholder {
+  color: var(--text-muted);
+}
+
+.cl-add-submit {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-glow);
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius);
+  padding: 4px 12px;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: all var(--transition);
+}
+
+.cl-add-submit:hover {
+  background: #CCFBF1;
+  border-color: var(--accent-dim);
+}
+
+/* ── States ───────────────────────────────────────────────────────────────── */
+
+.cl-state {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 32px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.cl-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* ── Error banner ─────────────────────────────────────────────────────────── */
+
+.cl-error-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--red-bg);
+  border: 1px solid var(--red-border);
+  border-radius: var(--radius);
+  color: var(--red);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  padding: 10px 14px;
+  margin: 16px 32px 0;
+}
+
+.cl-error-dismiss {
+  background: none;
+  border: none;
+  color: var(--red);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+/* ── Mobile ───────────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .cl-page-header {
+    padding: 20px 16px 16px;
+  }
+
+  .cl-groups {
+    padding: 0 12px;
+    margin-top: 16px;
+  }
+
+  .cl-page-title {
+    font-size: 1.7rem;
+  }
+
+  .cl-group-title {
+    font-size: 1.1rem;
+  }
+
+  .cl-group-header {
+    padding: 12px 12px 12px 12px;
+  }
+
+  .cl-task-main {
+    padding: 10px 10px 10px 12px;
+  }
+
+  .cl-notes-panel {
+    padding-left: 14px;
+  }
+
+  .cl-task-actions {
+    opacity: 1;
+  }
+
+  .cl-add-row {
+    padding: 8px 12px;
+  }
+
+  .cl-error-banner {
+    margin: 12px 12px 0;
+  }
+}
+
+/* ── Mobile — bottom nav clearance ──────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .cl-page {
+    padding-bottom: 80px;
+  }
+
+  .cl-page-header {
+    padding: 16px 16px 14px;
+  }
+
+  .cl-page-title {
+    font-size: 1.7rem;
+  }
+
+  .cl-groups {
+    padding: 0 12px;
+    margin-top: 14px;
+  }
+
+  .cl-group-header {
+    padding: 11px 12px;
+  }
+
+  .cl-group-title {
+    font-size: 1.05rem;
+  }
+
+  .cl-task-main {
+    padding: 10px 10px 10px 12px;
+    min-height: 46px;
+  }
+
+  /* Always show actions on mobile — no hover */
+  .cl-task-actions {
+    opacity: 1;
+  }
+
+  .cl-action--date {
+    opacity: 1;
+  }
+
+  .cl-notes-panel {
+    padding-left: 14px;
+  }
+
+  .cl-add-row {
+    padding: 10px 12px;
+  }
+
+  .cl-error-banner {
+    margin: 10px 12px 0;
+  }
+
+  /* Larger touch targets on checkboxes */
+  .cl-checkbox {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* ── Drag handle ─────────────────────────────────────────────────────────── */
+
+.cl-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  flex-shrink: 0;
+  color: var(--border-mid);
+  cursor: grab;
+  opacity: 0;
+  transition: opacity var(--transition);
+  margin-left: -4px;
+}
+
+.cl-task-row:hover .cl-drag-handle {
+  opacity: 1;
+}
+
+.cl-drag-handle:active {
+  cursor: grabbing;
+}
+
+/* ── Drag states ─────────────────────────────────────────────────────────── */
+
+.cl-task-drag-wrapper {
+  transition: transform 0.15s ease;
+}
+
+.cl-task-drag-wrapper--over {
+  border-top: 2px solid var(--accent);
+}
+
+.cl-task-row--dragging {
+  opacity: 0.4;
+}
+
+/* ── Auto-expanding notes textarea ───────────────────────────────────────── */
+
+.cl-notes-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  padding: 8px 10px;
+  resize: none;        /* no manual resize — auto-expands */
+  overflow: hidden;    /* hide scrollbar — height is always full */
+  outline: none;
+  transition: border-color var(--transition);
+  min-height: 36px;
+}
+
+.cl-notes-textarea:focus {
+  border-color: var(--accent-dim);
+}
+
+.cl-notes-textarea::placeholder {
+  color: var(--text-muted);
+}

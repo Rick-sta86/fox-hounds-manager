@@ -1,0 +1,158 @@
+/* ── MobileNav.css ───────────────────────────────────────────────────────── */
+
+/* ── Bottom tab bar ──────────────────────────────────────────────────────── */
+
+.mobile-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -1px 8px rgba(0,0,0,0.06);
+  display: flex;
+  align-items: stretch;
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.mobile-nav__tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  position: relative;
+  transition: color var(--transition);
+  padding: 8px 0;
+}
+
+.mobile-nav__tab:active {
+  background: var(--bg-surface);
+}
+
+.mobile-nav__tab--active {
+  color: var(--accent);
+}
+
+.mobile-nav__label {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  letter-spacing: 0.03em;
+}
+
+.mobile-nav__chevron {
+  position: absolute;
+  top: 6px;
+  right: calc(50% - 20px);
+}
+
+/* Active indicator bar */
+.mobile-nav__tab--active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 25%;
+  right: 25%;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 0 0 2px 2px;
+}
+
+/* ── Cadence drawer ──────────────────────────────────────────────────────── */
+
+.mobile-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 110;
+}
+
+.mobile-drawer {
+  position: fixed;
+  bottom: 64px;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  border-radius: 12px 12px 0 0;
+  z-index: 120;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  animation: drawerUp 0.2s ease;
+}
+
+@keyframes drawerUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.mobile-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.mobile-drawer-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+}
+
+.mobile-drawer-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+
+.mobile-drawer-items {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0 12px;
+}
+
+.mobile-drawer-item {
+  display: flex;
+  align-items: center;
+  padding: 14px 24px;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition);
+  border-bottom: 1px solid var(--border);
+}
+
+.mobile-drawer-item:last-child {
+  border-bottom: none;
+}
+
+.mobile-drawer-item:active {
+  background: var(--bg-surface);
+}
+
+.mobile-drawer-item--active {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ── App shell mobile adjustments ────────────────────────────────────────── */
+
+.app-shell--mobile .main-content {
+  padding-bottom: 64px;
+}

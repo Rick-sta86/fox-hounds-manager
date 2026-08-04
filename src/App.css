@@ -1,0 +1,15 @@
+/* ── Firebase status banner ──────────────────────────────── */
+.firebase-banner {
+  background: var(--red-bg);
+  border-bottom: 1px solid var(--red-border);
+  color: var(--red);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 8px 48px;
+}
+
+.firebase-banner--ok {
+  background: var(--green-dim);
+  border-bottom: 1px solid var(--green-border);
+  color: var(--green);
+}

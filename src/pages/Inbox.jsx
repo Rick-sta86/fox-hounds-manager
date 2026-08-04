@@ -4,8 +4,7 @@ import {
 } from 'lucide-react'
 import './Inbox.css'
 
-const GIST_RAW_URL =
-  'https://gist.githubusercontent.com/Rick-sta86/a183b86ac5931e0c1c574538b465fb13/raw/inbox.json'
+const INBOX_API = '/.netlify/functions/inbox-data'
 const STALE_DAYS = 7
 
 const COLUMNS = [
@@ -115,7 +114,7 @@ export default function Inbox() {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(`${GIST_RAW_URL}?t=${Date.now()}`)
+      const res = await fetch(`${INBOX_API}?t=${Date.now()}`)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
 

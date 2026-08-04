@@ -19,6 +19,61 @@
 
 .inbox-page-header-inner {
   max-width: 960px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.inbox-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.inbox-refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.inbox-refresh-btn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.inbox-refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+@keyframes inbox-spin {
+  to { transform: rotate(360deg); }
+}
+
+.inbox-spinning {
+  animation: inbox-spin 0.8s linear infinite;
+}
+
+.inbox-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--red-bg, #fff1f0);
+  border-bottom: 1px solid var(--red-border, #ffa39e);
+  color: var(--red, #cf1322);
+  font-size: 0.75rem;
+  padding: 8px 32px;
+  flex-shrink: 0;
 }
 
 .inbox-page-title {

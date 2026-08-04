@@ -1,7 +1,7 @@
 // inbox-data.js — GET endpoint that returns the current Gist inbox data
 // Proxies through GitHub API so the client never needs a token and there's no CDN caching
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Content-Type': 'application/json',
@@ -38,7 +38,6 @@ exports.handler = async (event) => {
       return { statusCode: 404, headers, body: JSON.stringify({ error: 'inbox.json not found in Gist' }) }
     }
 
-    // Parse and re-serialise so we return clean JSON
     const parsed = JSON.parse(content)
     return { statusCode: 200, headers, body: JSON.stringify(parsed) }
 

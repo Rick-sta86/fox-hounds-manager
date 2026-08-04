@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { collection, getDocs } from 'firebase/firestore'
-import { db } from './firebase'
+import { onAuthStateChanged } from 'firebase/auth'
+import { db, auth } from './firebase'
 import { useAutoReset } from './hooks/useAutoReset'
 import Sidebar from './components/Sidebar'
 import MobileNav from './components/MobileNav'
@@ -39,7 +40,10 @@ export default function App() {
   )
 
   useEffect(() => {
-    async function checkFirestore() {
+    // Wait for anonymous auth to complete before testing Firestore
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (!user) return // still signing in
+      unsub()          // unsubscribe once we have a user
       try {
         await getDocs(collection(db, '_connection_check'))
         setFirebaseStatus('ok')
@@ -47,8 +51,8 @@ export default function App() {
         console.error('Firestore connection error:', err)
         setFirebaseStatus('error')
       }
-    }
-    checkFirestore()
+    })
+    return () => unsub()
   }, [])
 
   const handleNavigate = (page) => {

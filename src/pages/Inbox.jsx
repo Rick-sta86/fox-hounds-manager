@@ -1,11 +1,12 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import {
-  Mail, AlertCircle, Clock, Edit3, Archive, CheckCircle2, RefreshCw,
+  Mail, AlertCircle, Clock, Edit3, Archive, CheckCircle2, RefreshCw, Send,
 } from 'lucide-react'
 import './Inbox.css'
 
-const INBOX_API = '/.netlify/functions/inbox-data'
-const STALE_DAYS = 7
+const INBOX_API    = '/.netlify/functions/inbox-refresh'
+// This secret is also stored in Netlify env — move to import.meta.env.VITE_INBOX_SECRET if the repo is public
+const INBOX_SECRET = 'aaIMOVLXq4m3fK6zT9OZKeHDelrSJoybJeobySDF'
 
 const COLUMNS = [
   { key: 'needs_you',      label: 'Needs You',      icon: AlertCircle  },
@@ -15,49 +16,48 @@ const COLUMNS = [
   { key: 'actioned',       label: 'Actioned',       icon: CheckCircle2 },
 ]
 
-// ── Helpers ───────────────────────────────────────────────────────────────
-
-function parseDate(value) {
-  if (!value) return null
-  const d = new Date(value)
-  return isNaN(d.getTime()) ? null : d
-}
-
-function daysAgo(value) {
-  const d = parseDate(value)
-  if (!d) return null
-  return Math.floor((Date.now() - d.getTime()) / 86400000)
-}
-
-function formatSince(value) {
-  const days = daysAgo(value)
-  if (days === null) return value || '—'
-  if (days <= 0)  return 'today'
-  if (days === 1) return 'yesterday'
-  if (days < 30)  return `${days} days ago`
-  return parseDate(value).toLocaleDateString('en-GB', {
-    day: 'numeric', month: 'short', year: 'numeric',
-  })
-}
-
-// ── InboxCard ─────────────────────────────────────────────────────────────
+// ── InboxCard ─────────────────────────────────────────────────────────────────
 
 function InboxCard({ item, onMove }) {
-  const dateValue = item.since || item.date
-  const days      = daysAgo(dateValue)
-  const isStale   = item.category !== 'actioned' && days !== null && days > STALE_DAYS
+  const [draftOpen, setDraftOpen] = useState(false)
 
   return (
-    <div className={`inbox-card ${isStale ? 'inbox-card--stale' : ''}`}>
+    <div className={`inbox-card ${item.stale ? 'inbox-card--stale' : ''}`}>
       <div className="inbox-card-top">
         <span className="inbox-card-who">{item.who || 'Unknown'}</span>
-        {isStale && <AlertCircle size={13} className="inbox-stale-icon" />}
+        {item.stale && <AlertCircle size={13} className="inbox-stale-icon" />}
       </div>
+
       <p className="inbox-card-what">{item.what || ''}</p>
+
+      {item.draft && (
+        <div className="inbox-card-draft">
+          {draftOpen ? (
+            <>
+              <p className="inbox-card-draft-body">{item.draft}</p>
+              <button
+                className="inbox-draft-toggle mono"
+                onClick={() => setDraftOpen(false)}
+              >
+                hide draft
+              </button>
+            </>
+          ) : (
+            <button
+              className="inbox-draft-toggle mono"
+              onClick={() => setDraftOpen(true)}
+            >
+              <Send size={10} />
+              view draft
+            </button>
+          )}
+        </div>
+      )}
+
       <div className="inbox-card-bottom">
         <span className="inbox-card-since mono">
           <Clock size={11} />
-          {formatSince(dateValue)}
+          {item.since || '—'}
         </span>
         <select
           className="inbox-move-select mono"
@@ -74,7 +74,7 @@ function InboxCard({ item, onMove }) {
   )
 }
 
-// ── InboxColumn ───────────────────────────────────────────────────────────
+// ── InboxColumn ───────────────────────────────────────────────────────────────
 
 function InboxColumn({ column, items, onMove }) {
   const Icon = column.icon
@@ -102,7 +102,7 @@ function InboxColumn({ column, items, onMove }) {
   )
 }
 
-// ── Inbox (page) ──────────────────────────────────────────────────────────
+// ── Inbox (page) ──────────────────────────────────────────────────────────────
 
 export default function Inbox() {
   const [items,       setItems]       = useState([])
@@ -110,40 +110,43 @@ export default function Inbox() {
   const [loading,     setLoading]     = useState(false)
   const [error,       setError]       = useState(null)
 
-  const fetchGist = useCallback(async () => {
+  const fetchInbox = useCallback(async () => {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(`${INBOX_API}?t=${Date.now()}`)
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const res = await fetch(INBOX_API, {
+        method:  'POST',
+        headers: { 'x-inbox-secret': INBOX_SECRET },
+      })
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        throw new Error(body.error || `HTTP ${res.status}`)
+      }
       const data = await res.json()
 
-      // Flatten all column arrays into a single items list
-      const allItems = []
-      COLUMNS.forEach((col) => {
-        const arr = Array.isArray(data[col.key]) ? data[col.key] : []
-        arr.forEach((item, i) => {
-          allItems.push({
-            id: `${col.key}_${i}_${item.who}_${item.since || item.date || ''}`,
-            ...item,
-            category: item.category || col.key,
-          })
-        })
-      })
+      const allItems = (data.threads || []).map((t) => ({
+        id:       t.thread_id,
+        category: t.column,
+        who:      t.who,
+        what:     t.what,
+        since:    t.since,
+        stale:    t.stale,
+        draft:    t.draft || null,
+      }))
 
       setItems(allItems)
       setLastFetched(new Date())
     } catch (err) {
-      console.error('Gist fetch error:', err)
-      setError('Could not load inbox — check connection.')
+      console.error('Inbox fetch error:', err)
+      setError(`Could not load inbox — ${err.message}`)
     } finally {
       setLoading(false)
     }
   }, [])
 
-  useEffect(() => { fetchGist() }, [fetchGist])
+  useEffect(() => { fetchInbox() }, [fetchInbox])
 
-  // Move is local-state only; resets on next sync (intentional)
+  // Move is local-state only; resets on next refresh (intentional)
   const handleMove = useCallback((itemId, newCategory) => {
     setItems((prev) =>
       prev.map((item) =>
@@ -155,14 +158,8 @@ export default function Inbox() {
   const grouped = useMemo(() => {
     const map = Object.fromEntries(COLUMNS.map((c) => [c.key, []]))
     items.forEach((item) => {
-      if (map[item.category]) map[item.category].push(item)
-    })
-    COLUMNS.forEach((c) => {
-      map[c.key].sort((a, b) => {
-        const da  = parseDate(a.since || a.date)?.getTime() ?? 0
-        const db_ = parseDate(b.since || b.date)?.getTime() ?? 0
-        return c.key === 'actioned' ? db_ - da : da - db_
-      })
+      const key = map[item.category] ? item.category : 'actioned'
+      map[key].push(item)
     })
     return map
   }, [items])
@@ -185,9 +182,9 @@ export default function Inbox() {
             <p className="inbox-page-sub mono">{syncLabel}</p>
             <button
               className="inbox-refresh-btn mono"
-              onClick={fetchGist}
+              onClick={fetchInbox}
               disabled={loading}
-              title="Refresh from Asi"
+              title="Fetch latest from Gmail and re-categorise with Claude"
             >
               <RefreshCw size={13} className={loading ? 'inbox-spinning' : ''} />
               {loading ? 'Syncing…' : 'Refresh'}

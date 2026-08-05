@@ -235,6 +235,42 @@
   max-width: 110px;
 }
 
+/* ── Draft ──────────────────────────────────────────────────────────────── */
+
+.inbox-card-draft {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inbox-card-draft-body {
+  font-size: 0.73rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.inbox-draft-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  color: var(--accent);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.inbox-draft-toggle:hover {
+  text-decoration: underline;
+}
+
 /* ── Mobile ─────────────────────────────────────────────────────────────── */
 
 @media (max-width: 768px) {

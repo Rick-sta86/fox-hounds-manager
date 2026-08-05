@@ -177,12 +177,6 @@ export const handler = async (event) => {
     return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) }
   }
 
-  // Auth
-  const secret = event.headers['x-inbox-secret']
-  if (!secret || secret !== process.env.INBOX_SECRET) {
-    return { statusCode: 401, headers, body: JSON.stringify({ error: 'Unauthorized' }) }
-  }
-
   // Rate limit
   const ip = event.headers['x-forwarded-for']?.split(',')[0]?.trim() || 'unknown'
   if (isRateLimited(ip)) {

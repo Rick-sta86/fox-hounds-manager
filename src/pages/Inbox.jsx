@@ -4,9 +4,7 @@ import {
 } from 'lucide-react'
 import './Inbox.css'
 
-const INBOX_API    = '/.netlify/functions/inbox-refresh'
-// This secret is also stored in Netlify env — move to import.meta.env.VITE_INBOX_SECRET if the repo is public
-const INBOX_SECRET = 'aaIMOVLXq4m3fK6zT9OZKeHDelrSJoybJeobySDF'
+const INBOX_API = '/.netlify/functions/inbox-refresh'
 
 const COLUMNS = [
   { key: 'needs_you',      label: 'Needs You',      icon: AlertCircle  },
@@ -114,10 +112,7 @@ export default function Inbox() {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(INBOX_API, {
-        method:  'POST',
-        headers: { 'x-inbox-secret': INBOX_SECRET },
-      })
+      const res = await fetch(INBOX_API, { method: 'POST' })
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
         throw new Error(body.error || `HTTP ${res.status}`)
